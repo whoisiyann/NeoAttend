@@ -224,6 +224,7 @@ def add_to_table():
 
         messagebox.showinfo("Success", f'"{_NAME}" registered successfully!')
 
+    save_students_to_csv_file()
 
     ID.delete(0, END)
     NAME.delete(0, END)
@@ -393,7 +394,7 @@ def take_picture():
 def _SAVE_():
     save_students_to_csv_file()
     messagebox.showinfo("Success", "Save Profile Successfully")
-    
+
     update_total_count()
 
 
