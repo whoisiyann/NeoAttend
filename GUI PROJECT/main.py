@@ -224,8 +224,6 @@ def add_to_table():
 
         messagebox.showinfo("Success", f'"{_NAME}" registered successfully!')
 
-        save_students_to_csv_file()   # <<< SAVE after adding
-        update_total_count()      # <<< UPDATE total count
 
     ID.delete(0, END)
     NAME.delete(0, END)
@@ -391,6 +389,12 @@ def take_picture():
     cam.release()
     cv2.destroyAllWindows()
 
+#------------------------------------------------------SAVE PROFILE
+def _SAVE_():
+    save_students_to_csv_file()
+    messagebox.showinfo("Success", "Save Profile Successfully")
+    
+    update_total_count()
 
 
 
@@ -500,10 +504,10 @@ Label(
 
 
 photo = PhotoImage(file='pic.png')
-pic_icon = Frame(frame1, bg='#2D2D2D')
+pic_icon = Frame(frame1, bg='#2D2D2D', )
 pic_icon.place(relx=0.05, rely=0.15, relheight=0.50, relwidth=0.50)
 
-TAKE_ATTENDANCE__PIC_BTN = Button(pic_icon, image=photo)
+TAKE_ATTENDANCE__PIC_BTN = Button(pic_icon, image=photo, command=take_attendance)
 TAKE_ATTENDANCE__PIC_BTN.pack()
 
 TAKE_ATTENDANCE_BTN = Button(frame1, 
@@ -649,6 +653,7 @@ SAVE = Button(frame2,
     font=('times', 17, 'bold'),
     fg='#FFFFFF',
     bg='#4A4949',
+    command=_SAVE_
 )
 SAVE.place(relx=0.05, rely=0.87, relwidth=0.41)
 
