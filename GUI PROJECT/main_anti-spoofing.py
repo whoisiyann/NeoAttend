@@ -12,18 +12,17 @@ import numpy as np
 from scipy.spatial import distance
 
 
+#############################################   FUNCTION   ##############################################
 
-###########################################   FUNCTION   ###########################################
-
-# Load the facial landmark predictor
-predictor_path = "shape_predictor_68_face_landmarks.dat"  # Ensure this file is in the same directory or provide full path
+#----------------------------------------------------Load the facial landmark predictor
+predictor_path = "shape_predictor_68_face_landmarks.dat"
 if not os.path.exists(predictor_path):
     messagebox.showerror("Error", f"Facial landmark predictor file not found: {predictor_path}")
     exit(1)
 predictor = dlib.shape_predictor(predictor_path)
 detector = dlib.get_frontal_face_detector()
 
-# Function to calculate Eye Aspect Ratio (EAR)
+#--------------------------------------------------Function to calculate Eye Aspect Ratio (EAR)
 def eye_aspect_ratio(eye):
     A = distance.euclidean(eye[1], eye[5])
     B = distance.euclidean(eye[2], eye[4])
@@ -31,13 +30,13 @@ def eye_aspect_ratio(eye):
     ear = (A + B) / (2.0 * C)
     return ear
 
-# Thresholds for blink detection
+#-----------------------hresholds for blink detection
 EAR_THRESHOLD = 0.25
-CONSECUTIVE_FRAMES = 3  # Number of consecutive frames with low EAR to count as blink
+CONSECUTIVE_FRAMES = 3
 
 #------------------------------------------------------TAKE ATTENDANCE
 def take_attendance():
-    
+
     folder = "students_picture"
     if not os.path.exists(folder):
         messagebox.showerror("Error", "No student pictures found.")
@@ -487,13 +486,6 @@ def _SAVE_():
     messagebox.showinfo("Success", "Save Profile Successfully")
 
     update_total_count()
-
-
-
-
-
-
-
 
 
 
