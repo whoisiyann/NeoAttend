@@ -100,6 +100,7 @@ def take_attendance():
                     # Add to GUI table
                     table_attendace.insert("", "end", values=(_ID, _NAME, date, time))
                     present_count.config(text=str(int(present_count.cget("text")) + 1))
+                    window.update()
                     print(f"Attendance recorded for {_NAME} ({_ID})")
 
                     # ======== 7. Save attendance sa CSV file ==========
