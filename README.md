@@ -24,3 +24,9 @@ Student database management (add, edit, and remove student records)
 Attendance reports and analytics for teachers and administrators
 Secure and reliable system to prevent proxy or false attendance
 
+
+
+to run the code u can download this files
+
+https://drive.google.com/drive/folders/1TAnKWoVmUoPDX0fxVBPDEpDOjikvW8Iq?usp=sharing
+https://drive.google.com/drive/folders/1AqEYwFRTJrR3nJLLB01gummLe0CkYEAp?usp=sharing
