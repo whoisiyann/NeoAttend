@@ -72,7 +72,10 @@ def take_attendance():
         messagebox.showerror("Error", "Camera not detected.")
         return
 
-    messagebox.showinfo("Info", "Attendance mode started.\nPress ESC to stop.\nBlink detection enabled for anti-spoofing.")
+    messagebox.showinfo(
+                        "Info",
+                        'Attendance mode started.\n\nPress ESC to stop.\n\nNote:"Please blink to be recognized."'
+                        )
 
     # ======== 5. Start detecting faces ==========
     blink_counters = {}  # To track blinks per face
