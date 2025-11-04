@@ -10,7 +10,7 @@ import face_recognition
 import dlib
 import numpy as np
 from scipy.spatial import distance
-
+import winsound
 
 #############################################   FUNCTION   ##############################################
 
@@ -166,6 +166,7 @@ def take_attendance():
                         table_attendace.insert("", "end", values=(_ID, _NAME, date, time))
                         present_count.config(text=str(int(present_count.cget("text")) + 1))
                         window.update()
+                        winsound.Beep(1000, 150)
                         print(f"Attendance recorded for {_NAME} ({_ID})")
 
                         # ======== 7. Save attendance sa CSV file ==========
