@@ -658,7 +658,7 @@ Frame(menu_frame, bg='#545353', width=300, height=5).pack(padx=15)
 
 btn3 = Button(
     menu_frame,
-    text='👤 New Registration',
+    text='👤 Registration Page',
     font=('Calibri', 18, 'bold'),
     bg='#2D2D2D',
     fg='#FFC107',
