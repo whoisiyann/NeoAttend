@@ -25,7 +25,7 @@ def take_attendance():
     if not os.path.exists(attendance_folder):
         os.mkdir(attendance_folder)
 
-    # ======== 3. Load known faces and names ==========
+    # ======== 1. Load known faces and names ==========
     known_faces = []
     known_names = []
 
@@ -45,7 +45,7 @@ def take_attendance():
         messagebox.showerror("Error", "No known faces found in folder.")
         return
 
-    # ======== 4. Open webcam ==========
+    # ======== 2. Open webcam ==========
     cam = cv2.VideoCapture(0)
     if not cam.isOpened():
         messagebox.showerror("Error", "Camera not detected.")
@@ -53,7 +53,7 @@ def take_attendance():
 
     messagebox.showinfo("Info", "Attendance mode started.\nPress ESC to stop.")
 
-    # ======== 5. Start detecting faces ==========
+    # ======== 3. Start detecting faces ==========
     while True:
         ret, frame = cam.read()
         if not ret:
@@ -84,7 +84,7 @@ def take_attendance():
                     _ID = "N/A"
                     _NAME = name
 
-                # ======== 6. Record attendance ==========
+                # ======== 4. Record attendance ==========
                 now = datetime.datetime.now()
                 date = now.strftime("%m-%d-%Y")
                 time = now.strftime("%I:%M %p")
@@ -105,7 +105,7 @@ def take_attendance():
                     winsound.Beep(2000, 300)
                     print(f"Attendance recorded for {_NAME} ({_ID})")
 
-                    # # ======== 7. Save attendance sa CSV file ==========
+                    # # ======== 5. Save attendance sa CSV file ==========
                     # filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
                     # file_exists = os.path.isfile(filename)
 
@@ -115,7 +115,7 @@ def take_attendance():
                     #         writer.writerow(["ID", "Name", "Date", "Time"])
                     #     writer.writerow([_ID, _NAME, date, time])
 
-                    # ======== 8. AUTO SAVE FACE PICTURE FOR VALIDATION ==========
+                    # ======== 5. AUTO SAVE FACE PICTURE FOR VALIDATION ==========
                     picture_folder = os.path.join("attendance_pictures", date)
                     if not os.path.exists(picture_folder):
                         os.makedirs(picture_folder)
@@ -143,7 +143,7 @@ def take_attendance():
                     window.update()
                     print(f"Attendance recorded for {_NAME} ({_ID})")
 
-                    # ======== 7. Save attendance sa CSV file ==========
+                    # ======== 6. Save attendance sa CSV file ==========
                     filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
                     file_exists = os.path.isfile(filename)
 
@@ -153,7 +153,7 @@ def take_attendance():
                             writer.writerow(["ID", "Name", "Date", "Time"])
                         writer.writerow([_ID, _NAME, date, time])
 
-            # ======== 8. Draw box sa mukha ==========
+            # ======== 7. Draw box sa mukha ==========
             for (top, right, bottom, left) in face_locations:
                 top *= 4
                 right *= 4
@@ -404,6 +404,7 @@ def take_picture():
             cv2.imwrite(filename, frame)
             print(f"Saved as {_ID}_{_NAME}_{count}.jpg")
             count += 1
+            winsound.Beep(1000, 200)
 
         # ESC = exit
         elif key == 27:
