@@ -2,12 +2,12 @@
 
 _Project Features_
 
-•Automatically detects and recognizes students through the webcam and records their attendance with the correct date and time.
-•Saves a photo of each recognized student during attendance for proof of entry, validation, and anti-spoofing review, allowing teachers to verify if the image was taken live or from a phone screen.
-•Allows users to register students, validate their information, and capture images directly through the webcam for recognition.
-•Displays recorded attendance in a table and lets users save daily attendance into a CSV file for easy tracking and documentation.
-•Includes tools to edit or delete student information. When a student is removed, their stored images are also deleted automatically to keep the files clean.
-•Shows live clock and date on the main window for easy monitoring.
+> Automatically detects and recognizes students through the webcam and records their attendance with the correct date and time.
+> Saves a photo of each recognized student during attendance for proof of entry, validation, and anti-spoofing review, allowing teachers to verify if the image was taken live or from a phone screen.
+> Allows users to register students, validate their information, and capture images directly through the webcam for recognition.
+> Displays recorded attendance in a table and lets users save daily attendance into a CSV file for easy tracking and documentation.
+> Includes tools to edit or delete student information. When a student is removed, their stored images are also deleted automatically to keep the files clean.
+> Shows live clock and date on the main window for easy monitoring.
 
 
 __WireFrame__
