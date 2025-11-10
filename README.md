@@ -38,9 +38,10 @@ __FlowChart__
 
 
 
-#####################################################################################################
 
-to run the code pls download:
+
+
+to run the code download:
 
 > pip install opencv-python==4.7.0.72
 
