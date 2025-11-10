@@ -1,28 +1,37 @@
-NeoAttend GUI PROJECT
+“NeoAttend”
 
-PROJECT OVERVIEW:
+_Project Features_
 
-This project focuses on developing an attendance monitoring system that uses face recognition technology to record and manage student attendance automatically. Instead of using manual sign-in sheets or ID cards, the system will identify students through their facial features. This will make the process faster, more accurate, and less prone to cheating or proxy attendance. The system is designed specifically for schools and universities to ensure a more reliable way of tracking student presence in class.
+•Automatically detects and recognizes students through the webcam and records their attendance with the correct date and time.
+•Saves a photo of each recognized student during attendance for proof of entry, validation, and anti-spoofing review, allowing teachers to verify if the image was taken live or from a phone screen.
+•Allows users to register students, validate their information, and capture images directly through the webcam for recognition.
+•Displays recorded attendance in a table and lets users save daily attendance into a CSV file for easy tracking and documentation.
+•Includes tools to edit or delete student information. When a student is removed, their stored images are also deleted automatically to keep the files clean.
+•Shows live clock and date on the main window for easy monitoring.
 
-PROJECT DESCRIPTION:
 
-Traditional methods of recording attendance—such as roll calls, logbooks, or ID scanning—are often time-consuming, inaccurate, and vulnerable to misuse. To address these issues, this project proposes a Face Recognition Based Attendance Monitoring System that automatically verifies and records student attendance using facial biometrics. A camera will capture student images at the start of the class, and the system will match them against the stored database. The recorded attendance will be updated in real-time, and teachers can easily generate attendance reports. This system aims to reduce errors, save time, and promote fairness in monitoring student attendance.
+__WireFrame__
 
-PROJECT OBJECTIVES:
+<img width="1590" height="929" alt="Screenshot 2025-11-05 152918" src="https://github.com/user-attachments/assets/03a82458-e503-4282-a5ce-2081a1eefd6a" />
 
-To Eliminate manual errors in attendance recording by using automated face recognition.
-To Save time during classes by reducing the need for roll calls or manual sign-ins.
-To Prevent cheating such as proxy attendance or ID misuse.
-To Provide accurate and real-time reports for teachers and school administrators.
-To Promote fairness and accountability in tracking student presence.
 
-PROJECT FEATURES:
+<img width="1585" height="930" alt="Screenshot 2025-11-05 152929" src="https://github.com/user-attachments/assets/966bce4c-1a8e-4bdc-a1fe-9694328bb37c" />
 
-Automated face recognition for quick and accurate student identification
-Real-time attendance recording and database updates
-Student database management (add, edit, and remove student records)
-Attendance reports and analytics for teachers and administrators
-Secure and reliable system to prevent proxy or false attendance
+
+<img width="1592" height="932" alt="Screenshot 2025-11-05 152937" src="https://github.com/user-attachments/assets/94fece76-9891-4294-97d7-a4bca3ddf809" />
+
+
+__FlowChart__
+
+<img width="834" height="1042" alt="1 drawio" src="https://github.com/user-attachments/assets/699e187a-1b3e-4b9d-835e-06ec7381821a" />
+
+
+<img width="822" height="978" alt="2 drawio" src="https://github.com/user-attachments/assets/c6a9e22a-7024-4013-9eae-24ed14857541" />
+
+
+<img width="523" height="565" alt="3 drawio" src="https://github.com/user-attachments/assets/f241fee2-c624-4fdd-a8c6-bfbe2291080f" />
+
+
 
 
 
