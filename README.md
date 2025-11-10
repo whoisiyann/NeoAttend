@@ -37,11 +37,13 @@ __FlowChart__
 
 to run the code pls download:
 
-pip install opencv-python==4.7.0.72
-pip install numpy==1.26.4
-pip install cmake
-pip install path (copy the path of the Dlib-library-Installation)
-pip install face_recognition
+> pip install opencv-python==4.7.0.72
 
-https://drive.google.com/drive/folders/1TAnKWoVmUoPDX0fxVBPDEpDOjikvW8Iq?usp=sharing
-https://drive.google.com/drive/folders/1AqEYwFRTJrR3nJLLB01gummLe0CkYEAp?usp=sharing
+> pip install numpy==1.26.4
+
+> pip install cmake
+
+> pip install path (copy the path of the Dlib-library-Installation)
+
+> pip install face_recognition
+
