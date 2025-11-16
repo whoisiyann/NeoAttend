@@ -97,16 +97,3 @@ pip install path        # (copy the path of the Dlib-library installation)
 pip install face_recognition
 ```
 
----
-
-## **🖼️ Screenshots**
-
-*(Optional — replace later)*
-
-```
-/screenshots
- ├── main_menu.png
- ├── register_student.png
- ├── take_attendance.png
- ├── attendance_table.png
-```
