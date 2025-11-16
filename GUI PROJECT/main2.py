@@ -25,14 +25,14 @@ def take_attendance():
     if not os.path.exists(attendance_folder):
         os.mkdir(attendance_folder)
 
-    # ======== 1. Load known faces and names ==========
+    # ======== Load known faces and names ==========
     known_faces = []
     known_names = []
 
     for filename in os.listdir(folder):
         if filename.endswith(".jpg") or filename.endswith(".png"):
             path = os.path.join(folder, filename)
-            name = os.path.splitext(filename)[0]  # remove .jpg/.png
+            name = os.path.splitext(filename)[0]
             try:
                 image = face_recognition.load_image_file(path)
                 encoding = face_recognition.face_encodings(image)[0]
@@ -45,7 +45,7 @@ def take_attendance():
         messagebox.showerror("Error", "No known faces found in folder.")
         return
 
-    # ======== 2. Open webcam ==========
+    # ======== Open webcam ==========
     cam = cv2.VideoCapture(0)
     if not cam.isOpened():
         messagebox.showerror("Error", "Camera not detected.")
@@ -53,7 +53,7 @@ def take_attendance():
 
     messagebox.showinfo("Info", "Attendance mode started.\nPress ESC to stop.")
 
-    # ======== 3. Start detecting faces ==========
+    # ======== Start detecting faces ==========
     while True:
         ret, frame = cam.read()
         if not ret:
@@ -75,7 +75,7 @@ def take_attendance():
                 match_index = matches.index(True)
                 name = known_names[match_index]
 
-                # Split filename para makuha ang ID at Name
+
                 parts = name.split("_", 2)
                 if len(parts) >= 2:
                     _ID = parts[0]
@@ -84,7 +84,8 @@ def take_attendance():
                     _ID = "N/A"
                     _NAME = name
 
-                # ======== 4. Record attendance ==========
+
+                # ======== Record attendance ==========
                 now = datetime.datetime.now()
                 date = now.strftime("%m-%d-%Y")
                 time = now.strftime("%I:%M %p")
@@ -105,17 +106,8 @@ def take_attendance():
                     winsound.Beep(2000, 300)
                     print(f"Attendance recorded for {_NAME} ({_ID})")
 
-                    # # ======== 5. Save attendance sa CSV file ==========
-                    # filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
-                    # file_exists = os.path.isfile(filename)
 
-                    # with open(filename, "a", newline="", encoding="utf-8") as file:
-                    #     writer = csv.writer(file)
-                    #     if not file_exists:
-                    #         writer.writerow(["ID", "Name", "Date", "Time"])
-                    #     writer.writerow([_ID, _NAME, date, time])
-
-                    # ======== 5. AUTO SAVE FACE PICTURE FOR VALIDATION ==========
+                    # ======== AUTO SAVE FACE PICTURE FOR VALIDATION ==========
                     picture_folder = os.path.join("attendance_pictures", date)
                     if not os.path.exists(picture_folder):
                         os.makedirs(picture_folder)
@@ -124,36 +116,12 @@ def take_attendance():
                     pic_filename = f"{_ID}_{_NAME}_{timestamp}.jpg"
                     pic_path = os.path.join(picture_folder, pic_filename)
 
-                    # i-save yung current frame ng camera
+                    # TAKE PICTURE AFTER RECOGNIZING FACE FOR VALIDATION
                     cv2.imwrite(pic_path, frame)
                     print(f"Saved validation image: {pic_path}")
 
-                # Avoid duplicate attendance sa table
-                already_present = False
-                for item in table_attendace.get_children():
-                    values = table_attendace.item(item, "values")
-                    if values[0] == _ID and values[2] == date:
-                        already_present = True
-                        break
 
-                if not already_present:
-                    # Add to GUI table
-                    table_attendace.insert("", "end", values=(_ID, _NAME, date, time))
-                    present_count.config(text=str(int(present_count.cget("text")) + 1))
-                    window.update()
-                    print(f"Attendance recorded for {_NAME} ({_ID})")
-
-                    # ======== 6. Save attendance sa CSV file ==========
-                    filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
-                    file_exists = os.path.isfile(filename)
-
-                    with open(filename, "a", newline="", encoding="utf-8") as file:
-                        writer = csv.writer(file)
-                        if not file_exists:
-                            writer.writerow(["ID", "Name", "Date", "Time"])
-                        writer.writerow([_ID, _NAME, date, time])
-
-            # ======== 7. Draw box sa mukha ==========
+            # ======== Draw box sa mukha ==========
             for (top, right, bottom, left) in face_locations:
                 top *= 4
                 right *= 4
@@ -284,7 +252,7 @@ def sort_name_alphabetical():
     for i in range(len(data)):
         for j in range(i + 1, len(data)):
             if data[i][1].lower() > data[j][1].lower():
-                # Palitan ng pwesto kung hindi alphabetically
+
                 data[i], data[j] = data[j], data[i]
 
     for item in items:
@@ -567,7 +535,10 @@ def _SAVE_():
 
 
 
+
+
 ###########################################   GUI FRONT-END   ###########################################   
+
 window = Tk()
 window.title('BSIT1-07')
 window.geometry('1280x720')
