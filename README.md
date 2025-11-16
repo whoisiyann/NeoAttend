@@ -37,7 +37,7 @@ Built with **Python, OpenCV, and face_recognition**, it is designed for classroo
 
 * Displays recorded attendance in a table and allows saving daily attendance into a CSV file for easy tracking and documentation.
 
-* Includes tools to edit or delete student information — deleting a student also removes their stored images to keep files organized.
+* Includes tools to edit or delete student information. When a student is removed, their stored images are also deleted automatically to keep the files clean.
 
 * Shows a live clock and date on the main window for easy monitoring.
 
