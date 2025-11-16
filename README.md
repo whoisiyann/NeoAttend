@@ -17,7 +17,6 @@ A Smart Facial Recognition Attendance System
 * [Flowchart](#flowchart)
 * [How It Works](#how-it-works)
 * [Installation](#installation)
-* [Screenshots](#screenshots)
 
 ---
 
