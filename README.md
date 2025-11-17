@@ -45,11 +45,11 @@ Built with **Python, OpenCV, and face_recognition**, it is designed for classroo
 
 ## **🧩 Wireframe**
 
-<img width="1590" src="https://github.com/user-attachments/assets/03a82458-e503-4282-a5ce-2081a1eefd6a" />
+<img width="1200" src="https://github.com/user-attachments/assets/03a82458-e503-4282-a5ce-2081a1eefd6a" />
 
-<img width="1585" src="https://github.com/user-attachments/assets/966bce4c-1a8e-4bdc-a1fe-9694328bb37c" />
+<img width="1200" src="https://github.com/user-attachments/assets/966bce4c-1a8e-4bdc-a1fe-9694328bb37c" />
 
-<img width="1585" alt="Wireframe - Registration Page" src="https://github.com/user-attachments/assets/0e3a54ed-6b6d-46cb-9959-3c67392bfee1" />
+<img width="1200" src="https://github.com/user-attachments/assets/0e3a54ed-6b6d-46cb-9959-3c67392bfee1" />
 
 
 
