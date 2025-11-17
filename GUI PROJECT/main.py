@@ -8,6 +8,7 @@ import os
 import cv2
 import face_recognition
 import winsound
+import re
 
 #############################################   FUNCTION   ##############################################
 
@@ -25,14 +26,14 @@ def take_attendance():
     if not os.path.exists(attendance_folder):
         os.mkdir(attendance_folder)
 
-    # ======== 1. Load known faces and names ==========
+    # ======== Load known faces and names ==========
     known_faces = []
     known_names = []
 
     for filename in os.listdir(folder):
         if filename.endswith(".jpg") or filename.endswith(".png"):
             path = os.path.join(folder, filename)
-            name = os.path.splitext(filename)[0]  # remove .jpg/.png
+            name = os.path.splitext(filename)[0]
             try:
                 image = face_recognition.load_image_file(path)
                 encoding = face_recognition.face_encodings(image)[0]
@@ -45,7 +46,7 @@ def take_attendance():
         messagebox.showerror("Error", "No known faces found in folder.")
         return
 
-    # ======== 2. Open webcam ==========
+    # ======== Open webcam ==========
     cam = cv2.VideoCapture(0)
     if not cam.isOpened():
         messagebox.showerror("Error", "Camera not detected.")
@@ -53,7 +54,7 @@ def take_attendance():
 
     messagebox.showinfo("Info", "Attendance mode started.\nPress ESC to stop.")
 
-    # ======== 3. Start detecting faces ==========
+    # ======== Start detecting faces ==========
     while True:
         ret, frame = cam.read()
         if not ret:
@@ -75,7 +76,7 @@ def take_attendance():
                 match_index = matches.index(True)
                 name = known_names[match_index]
 
-                # Split filename para makuha ang ID at Name
+
                 parts = name.split("_", 2)
                 if len(parts) >= 2:
                     _ID = parts[0]
@@ -84,7 +85,8 @@ def take_attendance():
                     _ID = "N/A"
                     _NAME = name
 
-                # ======== 4. Record attendance ==========
+
+                # ======== Record attendance ==========
                 now = datetime.datetime.now()
                 date = now.strftime("%m-%d-%Y")
                 time = now.strftime("%I:%M %p")
@@ -105,17 +107,8 @@ def take_attendance():
                     winsound.Beep(2000, 300)
                     print(f"Attendance recorded for {_NAME} ({_ID})")
 
-                    # # ======== 5. Save attendance sa CSV file ==========
-                    # filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
-                    # file_exists = os.path.isfile(filename)
 
-                    # with open(filename, "a", newline="", encoding="utf-8") as file:
-                    #     writer = csv.writer(file)
-                    #     if not file_exists:
-                    #         writer.writerow(["ID", "Name", "Date", "Time"])
-                    #     writer.writerow([_ID, _NAME, date, time])
-
-                    # ======== 5. AUTO SAVE FACE PICTURE FOR VALIDATION ==========
+                    # ======== AUTO SAVE FACE PICTURE FOR VALIDATION ==========
                     picture_folder = os.path.join("attendance_pictures", date)
                     if not os.path.exists(picture_folder):
                         os.makedirs(picture_folder)
@@ -124,36 +117,12 @@ def take_attendance():
                     pic_filename = f"{_ID}_{_NAME}_{timestamp}.jpg"
                     pic_path = os.path.join(picture_folder, pic_filename)
 
-                    # i-save yung current frame ng camera
+                    # TAKE PICTURE AFTER RECOGNIZING FACE FOR VALIDATION
                     cv2.imwrite(pic_path, frame)
                     print(f"Saved validation image: {pic_path}")
 
-                # Avoid duplicate attendance sa table
-                already_present = False
-                for item in table_attendace.get_children():
-                    values = table_attendace.item(item, "values")
-                    if values[0] == _ID and values[2] == date:
-                        already_present = True
-                        break
 
-                if not already_present:
-                    # Add to GUI table
-                    table_attendace.insert("", "end", values=(_ID, _NAME, date, time))
-                    present_count.config(text=str(int(present_count.cget("text")) + 1))
-                    window.update()
-                    print(f"Attendance recorded for {_NAME} ({_ID})")
-
-                    # ======== 6. Save attendance sa CSV file ==========
-                    filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
-                    file_exists = os.path.isfile(filename)
-
-                    with open(filename, "a", newline="", encoding="utf-8") as file:
-                        writer = csv.writer(file)
-                        if not file_exists:
-                            writer.writerow(["ID", "Name", "Date", "Time"])
-                        writer.writerow([_ID, _NAME, date, time])
-
-            # ======== 7. Draw box sa mukha ==========
+            # ======== Draw box sa mukha ==========
             for (top, right, bottom, left) in face_locations:
                 top *= 4
                 right *= 4
@@ -228,8 +197,9 @@ def save_students_to_csv_file():
 #--------------------------------------------------------------SAVE ATTENDANCE TO CSV
 def save_attendance_to_csv():
     global attendance_saved
-    if len(table_attendace.get_children()) == 0:
-        messagebox.showinfo("Info", "No attendance records to save.")
+
+    if len(table_register.get_children()) == 0:
+        messagebox.showinfo("Info", "No registered students to save.")
         return
 
     attendance_folder = "attendance"
@@ -240,12 +210,44 @@ def save_attendance_to_csv():
     date = now.strftime("%m-%d-%Y")
     filename = os.path.join(attendance_folder, f"attendance_{date}.csv")
 
-    file_exists = os.path.isfile(filename)
+    # --- Collect present and absent students ---
+    present_students = []
+    absent_students = []
+
+    # Registered students
+    registered_students = {}
+    for item in table_register.get_children():
+        reg_id, reg_name = table_register.item(item, "values")
+        registered_students[reg_id] = reg_name
+
+    # Present students
+    present_ids = set()
+    for item in table_attendace.get_children():
+        _ID, _NAME, _DATE, _TIME = table_attendace.item(item, "values")
+        present_students.append([_ID, _NAME, _DATE, _TIME, "PRESENT"])
+        present_ids.add(_ID)
+
+    # Absent students
+    for reg_id, reg_name in registered_students.items():
+        if reg_id not in present_ids:
+            absent_students.append([reg_id, reg_name, date, "", "ABSENT"])
+
+    # --- Write to CSV ---
     with open(filename, "w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow(["ID", "Name", "Date", "Time"])  # header
-        for item in table_attendace.get_children():
-            writer.writerow(table_attendace.item(item, "values"))
+        writer.writerow(["ID", "Name", "Date", "Time", "Status"])
+
+        # Write present students first
+        for row in present_students:
+            writer.writerow(row)
+
+        # Add blank line before absent
+        if absent_students:
+            writer.writerow([])
+
+        # Write absent students
+        for row in absent_students:
+            writer.writerow(row)
 
     attendance_saved = True
     messagebox.showinfo("Success", f"Attendance saved to {filename}")
@@ -284,7 +286,7 @@ def sort_name_alphabetical():
     for i in range(len(data)):
         for j in range(i + 1, len(data)):
             if data[i][1].lower() > data[j][1].lower():
-                # Palitan ng pwesto kung hindi alphabetically
+
                 data[i], data[j] = data[j], data[i]
 
     for item in items:
@@ -297,20 +299,19 @@ def sort_name_alphabetical():
 #------------------------------------------------------SUBMIT NEW REGISTER STUDENT
 def add_to_table():
     _ID = ID.get()
-    _NAME = NAME.get()
+    _NAME = NAME.get().upper()
 
     if _ID == "" or _NAME == "":
         messagebox.showwarning("Warning", "Please fill out both ID and NAME")
         return
-
-    if " " in _ID:
-        messagebox.showerror("Invalid Input", "ID must not contain spaces!")
+    
+    if len(_NAME.replace(" ", "")) < 10:
+        messagebox.showerror("Invalid Input", "Please enter FULL NAME!")
         return
 
-    for num in _ID:
-        if not (num.isdigit() or num in "-"):
-            messagebox.showerror("Invalid Input", "ID must contain numbers only!" )
-            return
+    if not re.fullmatch(r"01-\d{6}", _ID):
+        messagebox.showerror("Invalid ID", "Please follow the ID format: 01-xxxxxx (6 digits)")
+        return
 
     for char in _NAME:
         if not (char.isalpha() or char in " .,'ñÑ"):
@@ -416,22 +417,22 @@ def take_picture():
 
 # -------------------------------------------------------------RIGHT CLICK TO EDIT AND DELETE
 
-def save_changes(edit_win, selected_item, id_entry, name_entry):
-    new_id = id_entry.get().strip()
-    new_name = name_entry.get().strip()
+def save_changes(edit_win, selected_item, NEW_ID, NEW_NAME):
+    new_id = NEW_ID.get().strip()
+    new_name = NEW_NAME.get().strip().upper()
 
     if not new_id or not new_name:
         messagebox.showerror("Error", "Please fill out both ID and NAME")
         return
-
-    # ID validation
-    if " " in new_id:
-        messagebox.showerror("Invalid Input", "ID must not contain spaces!")
+    
+    if len(new_name.replace(" ", "")) < 10:
+        messagebox.showerror("Invalid Input", "Please enter FULL NAME!")
         return
-    for char in new_id:
-        if not (char.isdigit() or char == "-"):
-            messagebox.showerror("Invalid Input", "ID must contain numbers only!")
-            return
+    
+
+    if not re.fullmatch(r"01-\d{6}", new_id):
+        messagebox.showerror("Invalid ID", "Please follow the ID format: 01-xxxxxx (6 digits)")
+        return
 
     # NAME validation
     for char in new_name:
@@ -454,8 +455,8 @@ def save_changes(edit_win, selected_item, id_entry, name_entry):
     messagebox.showinfo("Success", "Record updated successfully!")
     edit_win.destroy()
 
-
-def edit_selected_from_menu():
+#------------------------------------------------------EDIT STUDENT
+def edit_student():
     selected_item = table_register.selection()
     if not selected_item:
         messagebox.showwarning("Warning", "Please select a record to edit.")
@@ -463,7 +464,9 @@ def edit_selected_from_menu():
 
     # Get current values
     current_id, current_name = table_register.item(selected_item, "values")
+    
 
+#-------------------------------------------------------WINDOW FOR EDITING ID AND NAME
     # Create a small popup window for editing
     edit_win = Toplevel(window)
     edit_win.title("Edit Student")
@@ -471,66 +474,42 @@ def edit_selected_from_menu():
     edit_win.config(bg='#3A3938')
     edit_win.grab_set()  # Makes it modal
 
-    Label(edit_win, text="ID:", bg='#3A3938', fg='#FFFFFF', font=('times', 20, 'bold')).place(relx=0.45, rely=0.05)
-    id_entry = Entry(edit_win, bg='#4A4949', fg='#FFFFFF', font=('times', 15))
-    id_entry.place(relx=0.25, rely=0.22, relwidth=0.55)
-    id_entry.insert(0, current_id)
+#----------------------------------------------
+    Label(edit_win, 
+        text="ID:", 
+        bg='#3A3938', 
+        fg='#FFFFFF', 
+        font=('times', 20, 'bold')).place(relx=0.45, rely=0.05)
+    
+    NEW_ID = Entry(edit_win, 
+                    bg='#4A4949', 
+                    fg='#FFFFFF', 
+                    font=('times', 15))
+    NEW_ID.place(relx=0.25, rely=0.22, relwidth=0.55)
+    NEW_ID.insert(0, current_id)
 
-    Label(edit_win, text="Name:", bg='#3A3938', fg='#FFFFFF', font=('times', 20, 'bold')).place(relx=0.40, rely=0.38)
-    name_entry = Entry(edit_win, bg='#4A4949', fg='#FFFFFF', font=('times', 15))
-    name_entry.place(relx=0.25, rely=0.55, relwidth=0.55)
-    name_entry.insert(0, current_name)
+#----------------------------------------------
+    Label(edit_win, 
+        text="Name:", 
+        bg='#3A3938', 
+        fg='#FFFFFF', 
+        font=('times', 20, 'bold')).place(relx=0.40, rely=0.38)
+    
+    NEW_NAME = Entry(edit_win, 
+                    bg='#4A4949', 
+                    fg='#FFFFFF', 
+                    font=('times', 15))
+    NEW_NAME.place(relx=0.25, rely=0.55, relwidth=0.55)
+    NEW_NAME.insert(0, current_name)
 
-    # --- Define a local helper function instead of using lambda ---
+#----------------------------------------------SAVE BUTTON FUNCTION FOR EDIT ID & NAME
     def save_button_clicked():
-        save_changes(edit_win, selected_item, id_entry, name_entry)
+        save_changes(edit_win, selected_item, NEW_ID, NEW_NAME)
 
-    # Save button
+    #--------------SAVE BUTTON
     Button(edit_win, text="Save", bg='#4A4949', fg="#FFFFFF", font=('calibri', 15, 'bold'),
         command=save_button_clicked).place(relx=0.35, rely=0.79, relwidth=0.35, relheight=0.15)
 
-
-def delete_selected_from_menu():
-    selected_item = table_register.selection()
-    if not selected_item:
-        messagebox.showwarning("Warning", "Please select a student to delete.")
-        return
-
-    confirm = messagebox.askyesno("Confirm Delete", "Are you sure you want to delete this student?")
-
-
-    if confirm:
-        for item in selected_item:
-            values = table_register.item(item, "values")
-            student_id = values[0]
-            student_name = values[1]
-            #DELETE RECORD IN TABLE
-            table_register.delete(item)
-
-            #DELETE STUDENT PICTURE
-            folder = "students_picture"
-            if os.path.exists(folder):
-                for filename in os.listdir(folder):
-                    if filename.startswith(f"{student_id}_") or student_name in filename:
-                        file_path = os.path.join(folder, filename)
-                        
-                        try:
-                            os.remove(file_path)
-                            print(f"Deleted: {file_path}")
-                        except Exception as e:
-                            print(f"Error deleting {file_path}: {e}")
-
-        save_students_to_csv_file()
-        update_total_count()
-
-
-def show_context_menu(event):
-    selected_item = table_register.identify_row(event.y)
-    if selected_item:
-        table_register.selection_set(selected_item)
-        context_menu.entryconfig("Edit", command=edit_selected_from_menu)
-        context_menu.entryconfig("Delete", command=delete_selected_from_menu)
-        context_menu.post(event.x_root, event.y_root)
 
 #------------------------------------------------------DELETE STUDENT
 def delete_student():
@@ -539,8 +518,9 @@ def delete_student():
     if not selected_item:
         messagebox.showwarning("Warning", "Please select a student to delete.")
         return
-    
+
     confirm = messagebox.askyesno("Confirm Delete", "Are you sure you want to delete this student?")
+    
     
     if confirm:
         for item in selected_item:
@@ -569,6 +549,17 @@ def delete_student():
         update_total_count()      # <<< UPDATE total count
 
 
+def show_context_menu(event):
+    selected_item = table_register.identify_row(event.y)
+    if selected_item:
+        table_register.selection_set(selected_item)
+        context_menu.entryconfig("Edit", command=edit_student)
+        context_menu.entryconfig("Delete", command=delete_student)
+        context_menu.post(event.x_root, event.y_root)
+
+
+
+
 #------------------------------------------------------SAVE PROFILE
 def _SAVE_():
     save_students_to_csv_file()
@@ -578,7 +569,10 @@ def _SAVE_():
 
 
 
+
+
 ###########################################   GUI FRONT-END   ###########################################   
+
 window = Tk()
 window.title('BSIT1-07')
 window.geometry('1280x720')
@@ -780,6 +774,11 @@ table_attendace.column('TIME', width=125, anchor='center')
 
 table_attendace.place(relx=0.02, rely=0.12, relheight=0.80, relwidth=0.95)
 
+table_attendace.column('ID', width=80, anchor='center')
+table_attendace.column('NAME', width=300, anchor='w')
+table_attendace.column('DATE', width=80, anchor='center')
+table_attendace.column('TIME', width=80, anchor='center')
+
 scroll = Scrollbar(frame2, orient=VERTICAL, command=table_attendace.yview)
 table_attendace.configure(yscrollcommand=scroll.set)
 scroll.pack(side=RIGHT, fill=Y)
@@ -808,19 +807,36 @@ Label(
 
 Label(
     frame3,
-    text='Enter ID',
+    text='Enter ID:',
     fg='#FFFFFF',
     bg='#1E1E1E',
     font=('times', 25, 'bold')
-).place(relx=0.03, rely=0.15)
+).place(relx=0.01, rely=0.15)
 
 Label(
     frame3,
-    text='Enter Name',
-    fg='#FFFFFF',
+    text='(e.g. 01-xxxxx)',
+    fg='#800080',
     bg='#1E1E1E',
+    font=('calibri', 14, 'bold')
+).place(relx=0.05, rely=0.22)
+
+
+Label(
+    frame3,
+    text='Enter Full Name:',
+    fg='#FFFFFF',
+    bg="#1E1E1E",
     font=('times', 25, 'bold')
-).place(relx=0.03, rely=0.35)
+).place(relx=0.01, rely=0.37)
+
+Label(
+    frame3,
+    text='(e.g. DELA CRUZ, JUAN REYES)',
+    fg='#800080',
+    bg='#1E1E1E',
+    font=('calibri', 14, 'bold')
+).place(relx=0.05, rely=0.44)
 
 Label(
     frame3,
@@ -828,20 +844,20 @@ Label(
     fg='#FFFFFF',
     bg='#1E1E1E',
     font=('times', 15, 'bold')
-).place(relx=0.05, rely=0.68,relwidth=0.41)
+).place(relx=0.03, rely=0.72,relwidth=0.41)
 
 
 ID = Entry(frame3,
     font=('times', 20),
     bg='#4A4949',
     fg='#FFFFFF')
-ID.place(relx=0.06, rely=0.24, relwidth=0.40)
+ID.place(relx=0.03, rely=0.28, relwidth=0.41)
 
 NAME = Entry(frame3,
     font=('times', 20),
     bg='#4A4949',
     fg='#FFFFFF')
-NAME.place(relx=0.06, rely=0.44, relwidth=0.40)
+NAME.place(relx=0.03, rely=0.50, relwidth=0.41)
 
 
 SUBMIT = Button(frame3,
@@ -851,7 +867,7 @@ SUBMIT = Button(frame3,
     bg='#4A4949',
     command=add_to_table
 )
-SUBMIT.place(relx=0.05, rely=0.56, relwidth=0.16)
+SUBMIT.place(relx=0.03, rely=0.60, relwidth=0.16)
 
 DELETE = Button(frame3,
     text='🗑Delete Student',
@@ -860,7 +876,7 @@ DELETE = Button(frame3,
     bg='#4A4949',
     command=delete_student
 )
-DELETE.place(relx=0.22, rely=0.56, relwidth=0.24)
+DELETE.place(relx=0.20, rely=0.60, relwidth=0.24)
 
 TAKE = Button(frame3,
     text='🤳Take Images',
@@ -869,7 +885,7 @@ TAKE = Button(frame3,
     bg='#4A4949',
     command=take_picture
 )
-TAKE.place(relx=0.05, rely=0.75, relwidth=0.41)
+TAKE.place(relx=0.03, rely=0.79, relwidth=0.41)
 
 SAVE = Button(frame3,
     text='🔏Save Profile',
@@ -878,14 +894,14 @@ SAVE = Button(frame3,
     bg='#4A4949',
     command=_SAVE_
 )
-SAVE.place(relx=0.05, rely=0.87, relwidth=0.41)
+SAVE.place(relx=0.03, rely=0.89, relwidth=0.41)
 
 EDIT = Button(frame3,
     text='🖍EDIT',
     font=('times', 11, 'bold'),
     fg='#FFFFFF',
     bg='#4A4949',
-    command=edit_selected_from_menu
+    command=edit_student
 )
 EDIT.place(relx=0.82, rely=0.93, relwidth=0.15)
 
@@ -898,7 +914,7 @@ style.configure('Treeview',
     foreground='#FFFFFF',
     rowheight=30,  
     fieldbackground='#4A4949',
-    font=('times', 14))
+    font=('times', 12))
 
 style.configure('Treeview.Heading',
     background='#FFFFFF',
@@ -910,10 +926,10 @@ table_register = ttk.Treeview(frame3, columns=('ID', 'NAME'), show='headings')
 table_register.heading('ID', text='ID')
 table_register.heading('NAME', text='NAME')
 
-table_register.column('ID', width=150, anchor='center')
-table_register.column('NAME', width=250, anchor='w')
+table_register.column('ID', width=85, anchor='center')
+table_register.column('NAME', width=300, anchor='w')
 
-table_register.place(relx=0.48, rely=0.12, relheight=0.80, relwidth=0.49)
+table_register.place(relx=0.45, rely=0.12, relheight=0.80, relwidth=0.52)
 
 scroll = Scrollbar(frame3, orient=VERTICAL, command=table_register.yview)
 table_register.configure(yscrollcommand=scroll.set)
