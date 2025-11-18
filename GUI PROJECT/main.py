@@ -305,9 +305,16 @@ def add_to_table():
         messagebox.showwarning("Warning", "Please fill out both ID and NAME")
         return
     
-    if len(_NAME.replace(" ", "")) < 10:
-        messagebox.showerror("Invalid Input", "Please enter FULL NAME!")
+    # VALIDATE NAME FORMAT: LASTNAME, FIRSTNAME MIDDLENAME
+    name_pattern = r"^[A-Za-zÑñ .'’-]+,\s*[A-Za-zÑñ .'’-]+\s+[A-Za-zÑñ .'’-]+$"
+
+    if not re.fullmatch(name_pattern, _NAME):
+        messagebox.showerror(
+            "Invalid Name Format",
+            "Please follow format:\n\nLASTNAME, FIRSTNAME MIDDLENAME\n\nExample:\nDELA CRUZ, JUAN REYES"
+        )
         return
+
 
     if not re.fullmatch(r"01-\d{6}", _ID):
         messagebox.showerror("Invalid ID", "Please follow the ID format: 01-xxxxxx (6 digits)")
@@ -425,9 +432,16 @@ def save_changes(edit_win, selected_item, NEW_ID, NEW_NAME):
         messagebox.showerror("Error", "Please fill out both ID and NAME")
         return
     
-    if len(new_name.replace(" ", "")) < 10:
-        messagebox.showerror("Invalid Input", "Please enter FULL NAME!")
+    # VALIDATE NAME FORMAT: LASTNAME, FIRSTNAME MIDDLENAME
+    name_pattern = r"^[A-Za-zÑñ .'’-]+,\s*[A-Za-zÑñ .'’-]+\s+[A-Za-zÑñ .'’-]+$"
+
+    if not re.fullmatch(name_pattern, new_name):
+        messagebox.showerror(
+            "Invalid Name Format",
+            "Please follow format:\n\nLASTNAME, FIRSTNAME MIDDLENAME\n\nExample:\nDELA CRUZ, JUAN REYES"
+        )
         return
+
     
 
     if not re.fullmatch(r"01-\d{6}", new_id):
