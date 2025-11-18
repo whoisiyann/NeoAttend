@@ -69,7 +69,7 @@ def take_attendance():
         face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
         for face_encoding in face_encodings:
-            matches = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.5)
+            matches = face_recognition.compare_faces(known_faces, face_encoding, tolerance=0.45)
             name = "Unknown"
 
             if True in matches:
@@ -867,16 +867,16 @@ SUBMIT = Button(frame3,
     bg='#4A4949',
     command=add_to_table
 )
-SUBMIT.place(relx=0.03, rely=0.60, relwidth=0.16)
+SUBMIT.place(relx=0.03, rely=0.60, relwidth=0.41)
 
 DELETE = Button(frame3,
-    text='🗑Delete Student',
-    font=('times', 17, 'bold'),
-    fg='#FF4C4C',
+    text='🗑Delete',
+    font=('times', 11, 'bold'),
+    fg='#FFFFFF',
     bg='#4A4949',
     command=delete_student
 )
-DELETE.place(relx=0.20, rely=0.60, relwidth=0.24)
+DELETE.place(relx=0.66, rely=0.93, relwidth=0.15)
 
 TAKE = Button(frame3,
     text='🤳Take Images',
