@@ -1,0 +1,411 @@
+from tkinter import *
+from tkinter import ttk
+from tkinter import messagebox
+import datetime
+
+
+
+
+#---------------------------------------------------------------------------FUNCTION
+#------------------------------------------------------CLOCK
+def clock():
+    now = datetime.datetime.now()
+    day = now.strftime('%B %d, %Y')
+    time = now.strftime('%I:%M:%S %p')
+    date_label.config(text=f'{day}  |  {time}')
+    date_label.after(1000, clock)
+
+#------------------------------------------------------SHOW FRAME_1,2,3
+active_button = None
+
+def set_active_button(button):
+    global active_button
+
+    if active_button:
+        active_button.config(bg='#2D2D2D')
+
+    button.config(bg='#545353')
+    active_button = button
+
+def show_frame1():
+    frame1.tkraise()
+    set_active_button(btn1)
+
+def show_frame2():
+    frame2.tkraise()
+    set_active_button(btn2)
+
+def show_frame3():
+    frame3.tkraise()
+    set_active_button(btn3)
+
+
+###########################################   GUI FRONT-END   ###########################################   
+
+window = Tk()
+window.title('BSIT1-07')
+window.geometry('1280x720')
+window.config(bg='#3A3938')
+
+#------------------------------------------------------TITLE NAME
+Label(window, 
+    text='📅 NeoAttend',
+    font=('ink free', 55, 'bold'),
+    fg='white', 
+    bg='#3A3938'
+).pack(fill='x', pady=20)
+
+#------------------------------------------------------DATE AND TIME
+
+date_label = Label(window, 
+    fg='orange',
+    bg='#3A3938',
+    font=('Times', 20, 'bold'),
+    anchor='e',
+    padx=20)
+date_label.place(relx=0.59, rely=0.16)
+clock()
+
+#------------------------------------------------------ MENU FRAME
+
+menu_frame = Frame(window, bg='#1E1E1E', bd=2, relief='raised')
+menu_frame.place(relx=0.09, rely=0.22, relwidth=0.22, relheight=0.70)
+menu_frame.pack_propagate(False)
+
+#------------------------------------------------------ CONTENT FRAME
+content_frame = Frame(window, bg='#1E1E1E', bd=2, relief='raised')
+content_frame.place(relx=0.32, rely=0.22, relwidth=0.59, relheight=0.70)
+
+#------------------------------------------------------ WINDOW 1,2,3
+frame1 = Frame(content_frame, bg='#1E1E1E')
+frame2= Frame(content_frame, bg='#1E1E1E')
+frame3 = Frame(content_frame, bg='#1E1E1E')
+
+for frame in (frame1, frame2, frame3):
+    frame.place(relwidth=1, relheight=1)
+#------------------------------------------------------ MENU
+frame_title = Frame(menu_frame, bg='#545353', bd=2)
+frame_title.pack(fill='x', pady=(0,5))
+
+Label(
+    frame_title,
+    text='🏠︎ MENU',
+    font=('Segoe UI', 25, 'bold'),
+    bg='#545353',
+    fg='#FFFFFF',
+).pack(fill='x')
+
+#------------------------------------------------------ MENU BUTTONS
+btn1 = Button(
+    menu_frame,
+    text='📸 Take Attendance',
+    font=('Calibri', 18, 'bold'),
+    bg='#2D2D2D',
+    fg='#00C851',
+    relief='flat',
+    command=show_frame1
+)
+btn1.pack(padx=15, pady=15, fill='x')
+
+btn2 = Button(
+    menu_frame,
+    text='📊 Attendance Reports',
+    font=('Calibri', 18, 'bold'),
+    bg='#2D2D2D',
+    fg='#2196F3',
+    relief='flat',
+    command=show_frame2
+)
+btn2.pack(padx=15, pady=(5,15), fill='x')
+
+Frame(menu_frame, bg='#545353', width=300, height=5).pack(padx=15)
+
+btn3 = Button(
+    menu_frame,
+    text='👤 Registration Page',
+    font=('Calibri', 18, 'bold'),
+    bg='#2D2D2D',
+    fg='#FFC107',
+    relief='flat',
+    command=show_frame3
+)
+btn3.pack(padx=15, pady=15, fill='x')
+
+
+#-------------------------------------------------------------------------WINDOW 1
+frame_title = Frame(frame1, bg='#545353', bd=2)
+frame_title.pack(fill='x', pady=(0,5))
+
+Label(
+    frame_title,
+    text='📸 Take Attendance',
+    fg='white',
+    bg='#545353',
+    font=('Comic Sans', 28,'bold')
+).pack()
+
+
+photo = PhotoImage(file='pic.png')
+pic_icon = Frame(frame1, bg='#2D2D2D', )
+pic_icon.place(relx=0.05, rely=0.15, relheight=0.50, relwidth=0.50)
+
+TAKE_ATTENDANCE__PIC_BTN = Button(pic_icon, image=photo)
+TAKE_ATTENDANCE__PIC_BTN.pack()
+
+TAKE_ATTENDANCE_BTN = Button(frame1, 
+    text='📸Take attendance',
+    font=('Comic Sans', 20, 'bold'),
+    bg='#2D2D2D',
+    fg='#00C851',
+#    command=take_attendance
+)
+TAKE_ATTENDANCE_BTN.place(relx=0.05, rely=0.68, relwidth=0.50)
+
+#-------------------------------------------------------------------
+present = Frame(frame1, bg='#54B749', bd=5, relief='sunken')
+present.place(relx=0.60, rely=0.15, relheight=0.25, relwidth=0.35)
+
+absent = Frame(frame1, bg='#DB2E2E', bd=5, relief='sunken')
+absent.place(relx=0.60, rely=0.44, relheight=0.25, relwidth=0.35)
+
+total = Frame(frame1, bg='#0400FF',  bd=5, relief='sunken')
+total.place(relx=0.60, rely=0.73, relheight=0.25, relwidth=0.35)
+#-------------------------------------------------------------------
+
+Label(present,
+    text='PRESENT',
+    fg='#FFFFFF',
+    bg='#54B749',
+    font=('times', 20, 'bold')).pack()
+
+present_count =Label(present,
+    text='0',
+    fg='#FFFFFF',
+    bg='#54B749',
+    font=('times', 50, 'bold'))
+present_count.pack()
+
+#-------------------------------------------------------------------
+Label(absent,
+    text='ABSENT',
+    fg='#FFFFFF',
+    bg='#DB2E2E',
+    font=('times', 20, 'bold')).pack()
+
+absent_count =Label(absent,
+    text='0',
+    fg='#FFFFFF',
+    bg='#DB2E2E',
+    font=('times', 50, 'bold'))
+absent_count.pack()
+
+#-------------------------------------------------------------------
+Label(total,
+    text='STUDENT TOTAL',
+    fg='#FFFFFF',
+    bg='#0400FF',
+    font=('times', 20, 'bold')).pack()
+
+total_count =Label(total,
+    text='0',
+    fg='#FFFFFF',
+    bg='#0400FF',
+    font=('times', 50, 'bold'))
+total_count.pack()
+
+
+#-------------------------------------------------------------------------WINDOW 2
+
+
+#------------------------------------ATTENDANCE TABLE
+frame_title = Frame(frame2, bg='#545353', bd=2)
+frame_title.pack(fill='x', pady=(0,5))
+
+Label(
+    frame_title,
+    text='📊 Attendance Reports',
+    fg='white',
+    bg='#545353',
+    font=('Comic Sans', 28, 'bold')).pack()
+
+
+table_attendace = ttk.Treeview(frame2, columns=('ID', 'NAME', 'DATE', 'TIME'), show='headings')
+
+table_attendace.heading('ID', text='ID')
+table_attendace.heading('NAME', text='NAME')
+table_attendace.heading('DATE', text='DATE')
+table_attendace.heading('TIME', text='TIME')
+
+table_attendace.column('ID', width=125, anchor='center')
+table_attendace.column('NAME', width=250, anchor='w')
+table_attendace.column('DATE', width=125, anchor='center')
+table_attendace.column('TIME', width=125, anchor='center')
+
+table_attendace.place(relx=0.02, rely=0.12, relheight=0.80, relwidth=0.95)
+
+table_attendace.column('ID', width=80, anchor='center')
+table_attendace.column('NAME', width=300, anchor='w')
+table_attendace.column('DATE', width=80, anchor='center')
+table_attendace.column('TIME', width=80, anchor='center')
+
+scroll = Scrollbar(frame2, orient=VERTICAL, command=table_attendace.yview)
+table_attendace.configure(yscrollcommand=scroll.set)
+scroll.pack(side=RIGHT, fill=Y)
+
+
+SAVE_ATTENDANCE_BTN1= Button(frame2,
+    text='📝SAVE',
+    font=('times', 11, 'bold'),
+    fg='#FFFFFF',
+    bg='#4A4949',
+#    command=save_attendance_to_csv
+)
+SAVE_ATTENDANCE_BTN1.place(relx=0.82, rely=0.93, relwidth=0.15)
+
+#------------------------------------------------------ WINDOW 3
+frame_title = Frame(frame3, bg='#545353', bd=2)
+frame_title.pack(fill='x', pady=(0,5))
+
+Label(
+    frame_title,
+    text='👤 Registration Page',
+    fg='white',
+    bg='#545353',
+    font=('Comic Sans', 28, 'bold')).pack()
+
+
+Label(
+    frame3,
+    text='Enter ID:',
+    fg='#FFFFFF',
+    bg='#1E1E1E',
+    font=('times', 25, 'bold')
+).place(relx=0.01, rely=0.15)
+
+Label(
+    frame3,
+    text='(e.g. 01-xxxxx)',
+    fg='#800080',
+    bg='#1E1E1E',
+    font=('calibri', 14, 'bold')
+).place(relx=0.05, rely=0.22)
+
+
+Label(
+    frame3,
+    text='Enter Full Name:',
+    fg='#FFFFFF',
+    bg="#1E1E1E",
+    font=('times', 25, 'bold')
+).place(relx=0.01, rely=0.37)
+
+Label(
+    frame3,
+    text='(e.g. DELA CRUZ, JUAN REYES)',
+    fg='#800080',
+    bg='#1E1E1E',
+    font=('calibri', 14, 'bold')
+).place(relx=0.05, rely=0.44)
+
+Label(
+    frame3,
+    text='1)Take Images  >>>  2)Save Profile',
+    fg='#FFFFFF',
+    bg='#1E1E1E',
+    font=('times', 15, 'bold')
+).place(relx=0.03, rely=0.72,relwidth=0.41)
+
+
+ID = Entry(frame3,
+    font=('times', 20),
+    bg='#4A4949',
+    fg='#FFFFFF')
+ID.place(relx=0.03, rely=0.28, relwidth=0.41)
+
+NAME = Entry(frame3,
+    font=('times', 20),
+    bg='#4A4949',
+    fg='#FFFFFF')
+NAME.place(relx=0.03, rely=0.50, relwidth=0.41)
+
+
+SUBMIT = Button(frame3,
+    text='📩Submit',
+    font=('times', 17, 'bold'),
+    fg='#00FF00',
+    bg='#4A4949',
+#    command=add_to_table
+)
+SUBMIT.place(relx=0.03, rely=0.60, relwidth=0.41)
+
+DELETE = Button(frame3,
+    text='🗑Delete',
+    font=('times', 11, 'bold'),
+    fg='#FFFFFF',
+    bg='#4A4949',
+#    command=delete_student
+)
+DELETE.place(relx=0.66, rely=0.93, relwidth=0.15)
+
+TAKE = Button(frame3,
+    text='🤳Take Images',
+    font=('times', 17, 'bold'),
+    fg='#FEA310',
+    bg='#4A4949',
+#    command=take_picture
+)
+TAKE.place(relx=0.03, rely=0.79, relwidth=0.41)
+
+SAVE = Button(frame3,
+    text='🔏Save Profile',
+    font=('times', 17, 'bold'),
+    fg='#FFFFFF',
+    bg='#4A4949',
+#    command=_SAVE_
+)
+SAVE.place(relx=0.03, rely=0.89, relwidth=0.41)
+
+EDIT = Button(frame3,
+    text='🖍EDIT',
+    font=('times', 11, 'bold'),
+    fg='#FFFFFF',
+    bg='#4A4949',
+#   command=edit_student
+)
+EDIT.place(relx=0.82, rely=0.93, relwidth=0.15)
+
+#------------------------------------------------------ REGISTER TABLE
+style = ttk.Style()
+style.theme_use('clam')
+
+style.configure('Treeview',
+    background='#4A4949',
+    foreground='#FFFFFF',
+    rowheight=30,  
+    fieldbackground='#4A4949',
+    font=('times', 12))
+
+style.configure('Treeview.Heading',
+    background='#FFFFFF',
+    foreground='#000000',
+    font=('Calibri', 16, 'bold'))
+
+table_register = ttk.Treeview(frame3, columns=('ID', 'NAME'), show='headings')
+
+table_register.heading('ID', text='ID')
+table_register.heading('NAME', text='NAME')
+
+table_register.column('ID', width=85, anchor='center')
+table_register.column('NAME', width=300, anchor='w')
+
+table_register.place(relx=0.45, rely=0.12, relheight=0.80, relwidth=0.52)
+
+scroll = Scrollbar(frame3, orient=VERTICAL, command=table_register.yview)
+table_register.configure(yscrollcommand=scroll.set)
+scroll.pack(side=RIGHT, fill=Y)
+
+
+
+#--------------------------------------------------------------------
+
+window.mainloop()
