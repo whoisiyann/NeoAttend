@@ -45,9 +45,9 @@ Built with **Python, OpenCV, and face_recognition**, it is designed for classroo
 
 ## **🧩 Wireframe**
 
-<img width="1200" src="https://github.com/user-attachments/assets/03a82458-e503-4282-a5ce-2081a1eefd6a" />
+<img width="1200" src="https://github.com/user-attachments/assets/a77cfd35-d978-46db-ab53-a26e360121b2" />
 
-<img width="1200" src="https://github.com/user-attachments/assets/966bce4c-1a8e-4bdc-a1fe-9694328bb37c" />
+<img width="1200" src="https://github.com/user-attachments/assets/f85b1973-12e1-47ca-9ca3-521b919016a0" />
 
 <img width="1200" src="https://github.com/user-attachments/assets/9ef2ee64-23f0-47c5-aa45-4548f5506275" />
 
