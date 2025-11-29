@@ -45,22 +45,24 @@ Built with **Python, OpenCV, and face_recognition**, it is designed for classroo
 
 ## **🧩 Wireframe**
 
-<img width="1200" src="https://github.com/user-attachments/assets/a77cfd35-d978-46db-ab53-a26e360121b2" />
+<img width="1200" src="https://github.com/user-attachments/assets/4688c683-6831-4adc-918f-7546d54feae1" />
 
-<img width="1200" src="https://github.com/user-attachments/assets/f85b1973-12e1-47ca-9ca3-521b919016a0" />
+<img width="1200" src="https://github.com/user-attachments/assets/7dbce89b-7112-4fcf-97fe-5c2de1123107" />
 
-<img width="1200" src="https://github.com/user-attachments/assets/9ef2ee64-23f0-47c5-aa45-4548f5506275" />
+<img width="1200" src="https://github.com/user-attachments/assets/c468273c-c049-4cdf-93b2-968f655c6fde" />
+
+<img width="1200" src="https://github.com/user-attachments/assets/24d0992c-7959-4b8d-b928-d276007aa6f4" />
 
 
 ---
 
 ## **🔁 Flowchart**
 
-<img width="834" src="https://github.com/user-attachments/assets/699e187a-1b3e-4b9d-835e-06ec7381821a" />
+<img width="834" src="https://github.com/user-attachments/assets/2cf44bbb-9e9f-4aff-99a6-7cfb3a0ea2ef" />
 
-<img width="822" src="https://github.com/user-attachments/assets/c6a9e22a-7024-4013-9eae-24ed14857541" />
+<img width="824" src="https://github.com/user-attachments/assets/38f400ce-8c23-4ece-b479-943416ec5acd" />
 
-<img width="523" src="https://github.com/user-attachments/assets/f241fee2-c624-4fdd-a8c6-bfbe2291080f" />
+<img width="532" src="https://github.com/user-attachments/assets/0b7e37d2-db31-40ab-941a-1d5e2352da5c" />
 
 ---
 
