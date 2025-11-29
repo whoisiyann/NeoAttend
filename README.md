@@ -22,8 +22,7 @@ A Smart Facial Recognition Attendance System
 
 ## **📌 About the Project**
 
-**NeoAttend** is a desktop-based attendance system using **facial recognition** to automatically detect students, log attendance, and store proof images for verification and anti-spoofing.
-Built with **Python, OpenCV, and face_recognition**, it is designed for classrooms and small groups needing fast and organized attendance tracking.
+**NeoAttend** is a simple GUI system that uses **face recognition** to record student attendance automatically. It helps teachers save time, avoid manual writing, and keep accurate attendance records.
 
 ---
 
@@ -31,7 +30,7 @@ Built with **Python, OpenCV, and face_recognition**, it is designed for classroo
 
 * Automatically detects and recognizes students through the webcam and records attendance with the correct date and time.
 
-* Saves a photo of each recognized student for proof, validation, and anti-spoofing review, allowing teachers to verify if the image was taken live or from a phone screen.
+* Saves a photo of each recognized student for proof, validation, and to help teachers check if the picture was taken live or just from a phone screen.
 
 * Allows users to register students, validate their information, and capture images directly through the webcam for recognition.
 
