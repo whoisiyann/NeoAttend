@@ -155,6 +155,36 @@ def clock():
     date_label.config(text=f'{day}  |  {time}')
     date_label.after(1000, clock)
 
+#----------------------------------------------------HOVER EFFECT
+
+def on_enter1(e):
+    e.widget['background'] = "#6A6969" # hover color
+
+def on_leave1(e):
+    e.widget['background'] = '#4A4949' # normal color
+
+
+def apply_hover1(button):
+    button.bind("<Enter>", on_enter1)
+    button.bind("<Leave>", on_leave1)
+
+
+#----------------------------------------------------HOVER EFFECT IN MENU
+def on_enter(e):
+    if e.widget != active_button:   
+        e.widget['background'] = '#545353' # hover color
+
+def on_leave(e):
+    if e.widget != active_button:   
+        e.widget['background'] = '#2D2D2D' #normal color
+
+
+def apply_hover(button):
+    button.bind("<Enter>", on_enter)
+    button.bind("<Leave>", on_leave)
+
+
+
 #------------------------------------------------------SHOW FRAME_1,2,3
 active_button = None
 
@@ -305,27 +335,23 @@ def add_to_table():
         messagebox.showwarning("Warning", "Please fill out both ID and NAME")
         return
     
-    # VALIDATE NAME FORMAT: LASTNAME, FIRSTNAME MIDDLENAME
+    #----------VALIDATE NAME FORMAT: LASTNAME, FIRSTNAME MIDDLENAME
     name_pattern = r"^[A-Za-zÑñ .'’-]+,\s*[A-Za-zÑñ .'’-]+\s+[A-Za-zÑñ .'’-]+$"
 
     if not re.fullmatch(name_pattern, _NAME):
         messagebox.showerror(
             "Invalid Name Format",
-            "Please follow format:\n\nLASTNAME, FIRSTNAME MIDDLENAME\n\nExample:\nDELA CRUZ, JUAN REYES"
+            "Please follow format:\n\nLASTNAME, FIRSTNAME MIDDLE NAME\n\nExample:\nDELA CRUZ, JUAN REYES"
         )
         return
 
-
+    #----------ALIDATE ID FORMAT: 01-xxxxxx
     if not re.fullmatch(r"01-\d{6}", _ID):
         messagebox.showerror("Invalid ID", "Please follow the ID format: 01-xxxxxx (6 digits)")
         return
 
-    for char in _NAME:
-        if not (char.isalpha() or char in " .,'ñÑ"):
-            messagebox.showerror("Invalid Input", "NAME must contain Letters only!")
-            return
     
-    #----------- CHECK DUPLICATE ID 
+    #----------CHECK DUPLICATE ID 
     for item in table_register.get_children():
         if table_register.item(item, "values")[0] == _ID:
             messagebox.showerror("Duplicate ID", "This ID already exists! Please use a unique ID." )
@@ -442,17 +468,11 @@ def save_changes(edit_win, selected_item, NEW_ID, NEW_NAME):
         )
         return
 
-    
 
     if not re.fullmatch(r"01-\d{6}", new_id):
         messagebox.showerror("Invalid ID", "Please follow the ID format: 01-xxxxxx (6 digits)")
         return
 
-    # NAME validation
-    for char in new_name:
-        if not (char.isalpha() or char in " .,'ñÑ"):
-            messagebox.showerror("Invalid Input", "NAME must contain letters only!")
-            return
 
     # Check duplicate ID
     for item in table_register.get_children():
@@ -583,15 +603,13 @@ def _SAVE_():
 
 
 
-
-
 ###########################################   GUI FRONT-END   ###########################################   
 
 window = Tk()
+window.resizable(False, False)
 window.title('BSIT1-07')
 window.geometry('1280x720')
 window.config(bg='#3A3938')
-
 #------------------------------------------------------TITLE NAME
 Label(window, 
     text='📅 NeoAttend',
@@ -608,7 +626,7 @@ date_label = Label(window,
     font=('Times', 20, 'bold'),
     anchor='e',
     padx=20)
-date_label.place(relx=0.59, rely=0.16)
+date_label.place(relx=0.57, rely=0.16)
 clock()
 
 #------------------------------------------------------ MENU FRAME
@@ -650,6 +668,7 @@ btn1 = Button(
     relief='flat',
     command=show_frame1
 )
+apply_hover(btn1)
 btn1.pack(padx=15, pady=15, fill='x')
 
 btn2 = Button(
@@ -661,6 +680,7 @@ btn2 = Button(
     relief='flat',
     command=show_frame2
 )
+apply_hover(btn2)
 btn2.pack(padx=15, pady=(5,15), fill='x')
 
 Frame(menu_frame, bg='#545353', width=300, height=5).pack(padx=15)
@@ -674,6 +694,7 @@ btn3 = Button(
     relief='flat',
     command=show_frame3
 )
+apply_hover(btn3)
 btn3.pack(padx=15, pady=15, fill='x')
 
 
@@ -704,6 +725,7 @@ TAKE_ATTENDANCE_BTN = Button(frame1,
     fg='#00C851',
     command=take_attendance
 )
+apply_hover1(TAKE_ATTENDANCE_BTN)
 TAKE_ATTENDANCE_BTN.place(relx=0.05, rely=0.68, relwidth=0.50)
 
 #-------------------------------------------------------------------
@@ -799,13 +821,14 @@ scroll.pack(side=RIGHT, fill=Y)
 
 
 SAVE_ATTENDANCE_BTN1= Button(frame2,
-    text='📝SAVE',
+    text='📁EXPORT TO CSV FILE',
     font=('times', 11, 'bold'),
     fg='#FFFFFF',
     bg='#4A4949',
     command=save_attendance_to_csv
 )
-SAVE_ATTENDANCE_BTN1.place(relx=0.82, rely=0.93, relwidth=0.15)
+apply_hover1(SAVE_ATTENDANCE_BTN1)
+SAVE_ATTENDANCE_BTN1.place(relx=0.72, rely=0.93, relwidth=0.25)
 
 #------------------------------------------------------ WINDOW 3
 frame_title = Frame(frame3, bg='#545353', bd=2)
@@ -829,8 +852,8 @@ Label(
 
 Label(
     frame3,
-    text='(e.g. 01-xxxxx)',
-    fg='#800080',
+    text='(e.g. 01-xxxxxx)',
+    fg="#6C6767",
     bg='#1E1E1E',
     font=('calibri', 14, 'bold')
 ).place(relx=0.05, rely=0.22)
@@ -847,17 +870,17 @@ Label(
 Label(
     frame3,
     text='(e.g. DELA CRUZ, JUAN REYES)',
-    fg='#800080',
+    fg="#6C6767",
     bg='#1E1E1E',
     font=('calibri', 14, 'bold')
 ).place(relx=0.05, rely=0.44)
 
 Label(
     frame3,
-    text='1)Take Images  >>>  2)Save Profile',
+    text='1)Take Images >>> 2)Save & Update',
     fg='#FFFFFF',
     bg='#1E1E1E',
-    font=('times', 15, 'bold')
+    font=('times', 14, 'bold')
 ).place(relx=0.03, rely=0.72,relwidth=0.41)
 
 
@@ -874,22 +897,24 @@ NAME = Entry(frame3,
 NAME.place(relx=0.03, rely=0.50, relwidth=0.41)
 
 
-SUBMIT = Button(frame3,
-    text='📩Submit',
-    font=('times', 17, 'bold'),
-    fg='#00FF00',
+REGISTER_STUDENT = Button(frame3,
+    text='👤Register Student',
+    font=('times', 17, 'bold'), 
+    fg="#008CBA",    
     bg='#4A4949',
     command=add_to_table
 )
-SUBMIT.place(relx=0.03, rely=0.60, relwidth=0.41)
+apply_hover1(REGISTER_STUDENT)
+REGISTER_STUDENT.place(relx=0.03, rely=0.60, relwidth=0.41)
 
 DELETE = Button(frame3,
-    text='🗑Delete',
+    text='🗑DELETE',
     font=('times', 11, 'bold'),
     fg='#FFFFFF',
     bg='#4A4949',
     command=delete_student
 )
+apply_hover1(DELETE)
 DELETE.place(relx=0.66, rely=0.93, relwidth=0.15)
 
 TAKE = Button(frame3,
@@ -899,15 +924,17 @@ TAKE = Button(frame3,
     bg='#4A4949',
     command=take_picture
 )
+apply_hover1(TAKE)
 TAKE.place(relx=0.03, rely=0.79, relwidth=0.41)
 
 SAVE = Button(frame3,
-    text='🔏Save Profile',
+    text='Save & Update CSV file',
     font=('times', 17, 'bold'),
-    fg='#FFFFFF',
+    fg='#00FF00',
     bg='#4A4949',
     command=_SAVE_
 )
+apply_hover1(SAVE)
 SAVE.place(relx=0.03, rely=0.89, relwidth=0.41)
 
 EDIT = Button(frame3,
@@ -917,6 +944,7 @@ EDIT = Button(frame3,
     bg='#4A4949',
     command=edit_student
 )
+apply_hover1(EDIT)
 EDIT.place(relx=0.82, rely=0.93, relwidth=0.15)
 
 #------------------------------------------------------ REGISTER TABLE
